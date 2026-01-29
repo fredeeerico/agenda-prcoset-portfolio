@@ -25,21 +25,18 @@ from datetime import datetime, date, time, timedelta, timezone
 # =====================================================
 @st.cache_resource
 def init_connection():
-    return psycopg2.connect(
-        host=st.secrets["DB_HOST"],       # host do Supabase portfolio
-        database=st.secrets["DB_NAME"],   # nome do banco (portfolio)
-        user=st.secrets["DB_USER"],       # usuário
-        password=st.secrets["DB_PASSWORD"], # senha
-        port=int(st.secrets["DB_PORT"]),# porta
-        sslmode="require", # SSL obrigatório
-    )
+    # Recomendado: utilizar a URL de conexão completa (Transaction Mode porta 6543)
+    # para evitar erros de resolução de DNS (IPv6) e SSL no Streamlit Cloud.
+    return psycopg2.connect(st.secrets["DATABASE_URL"])
 
 # Inicializa conexão
 conn = init_connection()
 cursor = conn.cursor()
 
-# Garante que não haja transações pendentes
+# Garante que não haja transações pendentes e define autocommit para evitar deadlocks
+conn.autocommit = True
 conn.rollback()
+
 
 # =====================================================
 # GLOBAL CONFIGURATION & APPLICATION STATE
@@ -412,6 +409,7 @@ elif st.session_state.aba_atual == "LISTA":
                 )
                 conn.commit()
                 st.rerun()
+
 
 
 
