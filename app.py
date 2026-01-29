@@ -25,8 +25,12 @@ from datetime import datetime, date, time, timedelta, timezone
 # =====================================================
 @st.cache_resource
 def init_connection():
-    # Adicionamos conect_timeout para evitar que a conexão trave sem resposta
-    return psycopg2.connect(st.secrets["DATABASE_URL"], connect_timeout=10)
+    # Adicionamos sslmode extra para garantir o handshake no Streamlit Cloud
+    return psycopg2.connect(
+        st.secrets["DATABASE_URL"], 
+        sslmode="require", 
+        connect_timeout=10
+    )
 
 # Inicializa conexão
 conn = init_connection()
@@ -34,6 +38,7 @@ cursor = conn.cursor()
 
 # Garante que não haja transações pendentes
 conn.rollback()
+
 
 
 # =====================================================
@@ -407,6 +412,7 @@ elif st.session_state.aba_atual == "LISTA":
                 )
                 conn.commit()
                 st.rerun()
+
 
 
 
