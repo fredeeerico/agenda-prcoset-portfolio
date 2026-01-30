@@ -140,4 +140,16 @@ elif st.session_state.aba_atual == "LISTA":
         if filtro_equipe and filtro_equipe.lower() not in str(ev["responsaveis"]).lower(): continue
 
         cor_base = "#2b488e" if ev["agenda_presidente"] == 1 else "#109439"
-        cor
+        cor_fonte = "white"
+        borda_4_lados = "1px solid rgba(255,255,255,0.2)"
+        barra_esquerda = "12px solid #ffffff44"
+        badge, opac = "", "1"
+        decor = "line-through" if ev["status"] == "CANCELADO" else "none"
+
+        if d_dt < datetime.now().date():
+            cor_base, cor_fonte, opac = "#d9d9d9", "#666666", "0.7"
+            barra_esquerda = "12px solid #999999"
+        
+        elif d_dt == datetime.now().date():
+            borda_4_lados = "4px solid #FFD700"
+           
