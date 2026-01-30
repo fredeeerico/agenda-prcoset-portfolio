@@ -3,9 +3,6 @@ import psycopg2
 import psycopg2.extras
 from datetime import date, time, datetime, timezone, timedelta
 
-# -----------------------------
-# CONEXÃO COM O BANCO (SUPABASE - TRANSACTION POOLER)
-# -----------------------------
 @st.cache_resource
 def init_connection():
     return psycopg2.connect(
@@ -17,7 +14,6 @@ def init_connection():
         sslmode=st.secrets["DB_SSLMODE"],
     )
 
-# Conexão e cursor
 conn = init_connection()
 cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
@@ -210,6 +206,7 @@ elif st.session_state.aba_atual == "LISTA":
         if c3.button("🗑️ Excluir", key=f"d_{ev['id']}"):
             cursor.execute("DELETE FROM eventos WHERE id=%s", (ev['id'],))
             conn.commit(); st.rerun()
+
 
 
 
