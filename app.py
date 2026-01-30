@@ -21,6 +21,7 @@ try:
 except Exception as e:
     st.error(f"Erro de conexão: {e}")
 
+
 # -----------------------------
 # 2. ESTADOS E CONFIGURAÇÃO
 # -----------------------------
@@ -209,6 +210,7 @@ elif st.session_state.aba_atual == "LISTA":
         if c3.button("🗑️ Excluir", key=f"d_{ev['id']}"):
             cursor.execute("DELETE FROM eventos WHERE id=%s", (ev['id'],))
             conn.commit(); st.rerun()
+
 
 
 
