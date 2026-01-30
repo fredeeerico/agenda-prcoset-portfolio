@@ -348,7 +348,7 @@ elif st.session_state.aba_atual == "LISTA":
         link_motorista = ""
         if evento["precisa_motorista"] == 1 and evento["motorista_telefone"]:
             telefone_limpo = "".join(filter(str.isdigit, str(evento["motorista_telefone"])))
-            link_motorista = f"<br>🚗 <b>Motorista:</b> {evento['motorista_nome']} (<a href='https://wa.me{telefone_limpo}' style='color:{cor_fonte}; font-weight:bold;'>{evento['motorista_telefone']}</a>)"
+            link_motorista = f"<br>🚗 <b>Motorista:</b> {evento['motorista_nome']} (<a href='https://wa.me/{telefone_limpo}' style='color:{cor_fonte}; font-weight:bold;'>{evento['motorista_telefone']}</a>)"
 
         st.markdown(f"""
         <div style="background:{cor_base}; color:{cor_fonte}; padding:22px; border-radius:15px;
@@ -393,3 +393,4 @@ elif st.session_state.aba_atual == "LISTA":
             )
             conn.commit()
             st.rerun()
+
