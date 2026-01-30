@@ -1,7 +1,7 @@
 import streamlit as st
 import psycopg2
 import psycopg2.extras
-from datetime import datetime, date, time, timezone, timedelta
+from datetime import datetime, date, time, timedelta, timezone
 
 # -----------------------------
 # 1. CONEXÃO E LIMPEZA
@@ -9,15 +9,16 @@ from datetime import datetime, date, time, timezone, timedelta
 @st.cache_resource
 def init_connection():
     return psycopg2.connect(
-        host=st.secrets["DB_HOST"],       # Acessando a variável DB_HOST
-        database=st.secrets["DB_NAME"],   # Acessando o nome do banco DB_NAME
-        user=st.secrets["DB_USER"],       # Acessando o nome de usuário DB_USER
-        password=st.secrets["DB_PASSWORD"],  # Acessando a senha DB_PASSWORD
-        port=st.secrets["DB_PORT"],       # Acessando a porta DB_PORT
-        sslmode=st.secrets["DB_SSLMODE"]  # Acessando o SSL
+        host=st.secrets["DB_HOST"],       # Usando o host fornecido no secrets
+        database=st.secrets["DB_NAME"],   # Nome do banco
+        user=st.secrets["DB_USER"],       # Usuário do banco
+        password=st.secrets["DB_PASSWORD"],  # Senha
+        port=st.secrets["DB_PORT"],       # Porta
+        sslmode=st.secrets["DB_SSLMODE"]  # SSL Mode
     )
 
 conn = init_connection()
+
 # Cursor que retorna dicionário em vez de tupla
 cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 conn.rollback()
@@ -134,4 +135,9 @@ elif st.session_state.aba_atual == "LISTA":
         d_dt = ev["data"] if isinstance(ev["data"], date) else datetime.strptime(str(ev["data"]), "%Y-%m-%d").date()
 
         if filtro_data and d_dt != filtro_data: continue
-        if filtro
+        if filtro_tipo == "Agenda do Presidente" and ev["agenda_presidente"] != 1: continue
+        if filtro_tipo == "Outras Agendas" and ev["agenda_presidente"] == 1: continue
+        if filtro_equipe and filtro_equipe.lower() not in str(ev["responsaveis"]).lower(): continue
+
+        cor_base = "#2b488e" if ev["agenda_presidente"] == 1 else "#109439"
+        cor
