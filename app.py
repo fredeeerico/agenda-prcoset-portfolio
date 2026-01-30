@@ -9,15 +9,16 @@ from datetime import datetime, date, time, timedelta, timezone
 @st.cache_resource
 def init_connection():
     return psycopg2.connect(
-        host=st.secrets["DB_HOST"],
-        database=st.secrets["DB_NAME"],
-        user=st.secrets["DB_USER"],
-        password=st.secrets["DB_PASSWORD"],
-        port=st.secrets["DB_PORT"],
-        sslmode=st.secrets["DB_SSLMODE"],
+        host=st.secrets["DB_HOST"],  # Acessando a variável DB_HOST
+        database=st.secrets["DB_NAME"],  # Acessando a variável DB_NAME
+        user=st.secrets["DB_USER"],  # Acessando a variável DB_USER
+        password=st.secrets["DB_PASSWORD"],  # Acessando a variável DB_PASSWORD
+        port=st.secrets["DB_PORT"],  # Acessando a variável DB_PORT
+        sslmode=st.secrets["DB_SSLMODE"],  # Acessando a variável DB_SSLMODE
     )
 
 conn = init_connection()
+
 # Cursor que retorna dicionário em vez de tupla
 cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 conn.rollback()
@@ -210,3 +211,4 @@ elif st.session_state.aba_atual == "LISTA":
         if c3.button("🗑️ Excluir", key=f"d_{ev['id']}"):
             cursor.execute("DELETE FROM eventos WHERE id=%s", (ev['id'],))
             conn.commit(); st.rerun()
+
