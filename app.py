@@ -27,10 +27,15 @@ from datetime import datetime, date, time, timedelta, timezone
 def init_connection():
     # Adicionamos sslmode extra para garantir o handshake no Streamlit Cloud
     return psycopg2.connect(
-        st.secrets["DATABASE_URL"], 
-        sslmode="require", 
+        host=st.secrets["DB_HOST"],
+        dbname=st.secrets["DB_NAME"],
+        user=st.secrets["DB_USER"],
+        password=st.secrets["DB_PASSWORD"],
+        port=st.secrets["DB_PORT"],
+        sslmode=st.secrets["DB_SSLMODE"],
         connect_timeout=10
     )
+
 
 # Inicializa conexão
 conn = init_connection()
@@ -412,6 +417,7 @@ elif st.session_state.aba_atual == "LISTA":
                 )
                 conn.commit()
                 st.rerun()
+
 
 
 
